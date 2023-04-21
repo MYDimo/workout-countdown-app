@@ -1,29 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import ClockTool from "./ClockTool";
+import CountdownTool from "./CountdownTool";
+import IntervalTool from "./IntervalTool";
 
 export default function ToolNavigator() {
-  const [clockTool, setClockTool] = useState(false);
-  const [intervalTool, setIntervalTool] = useState(false);
-  const [countDownTool, setCountDownTool] = useState(false);
+	const [clockState, setClockState] = useState(false);
+	const [intervalState, setIntervalState] = useState(false);
+	const [countDownState, setCountDownState] = useState(false);
 
-  const clockTollHandler = () => {
-    console.log("you chose clock");
-  }
-  const intervalToolHandler = () => {
-    console.log("you chose intervals");
-  }
-  const countDownToolHandler = () => {
-    console.log("you chose countdown");
-  }
+	const toggleClock = () => {
+		setClockState(prevState => !prevState);
+	};
+	const toggleInterval = () => {
+    setIntervalState(prevState => !prevState);
+	};
+	const toggleCountdown = () => {
+    setCountDownState(prevState => !prevState);
+	};
 
-  return (
-    <>
-      {!(clockTool || intervalTool || countDownTool) &&
-        <>
-          <div onClick={clockTollHandler}>Clock</div>
-          <div onClick={intervalToolHandler}>Intervals work/rest</div>
-          <div onClick={countDownToolHandler}>Countdown</div>
-        </>
-      }
-    </>
-  )
+
+
+	return (
+		<>
+			{!(clockState || intervalState || countDownState) && (
+				<>
+					<div onClick={toggleClock}>Clock</div>
+					<div onClick={toggleInterval}>Intervals work/rest</div>
+					<div onClick={toggleCountdown}>Countdown</div>
+				</>
+			)}
+			{clockState && <ClockTool toggleClock={toggleClock}/>}
+			{intervalState && <IntervalTool toggleInterval={toggleInterval}/>}
+			{countDownState && <CountdownTool toggleCountdown={toggleCountdown}/>}
+		</>
+	);
 }

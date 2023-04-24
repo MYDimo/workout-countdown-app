@@ -63,7 +63,7 @@ export default function CountdownTool({ toggleCountdown }) {
 				onChange={(e) => inputHandler(e)}
 			/>
 			{input && <div onClick={countDownStart}>Start</div>}
-			<div onClick={pauseCountdown}>Pause</div>
+			{input && <div onClick={pauseCountdown}>Pause</div>}
 			{countdown !== "00:00:00" && <div>{countdown}</div>}
 		</>
 	);

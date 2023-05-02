@@ -1,4 +1,3 @@
-import userEvent from "@testing-library/user-event";
 import React, { useState, useRef } from "react";
 
 export default function CountdownTool({ toggleCountdown }) {
@@ -21,7 +20,7 @@ export default function CountdownTool({ toggleCountdown }) {
 		}
 
 		const animate = () => {
-			if (deltaMax.current == 0) {
+			if (deltaMax.current === 0) {
 				deltaMax.current = Date.now() + input * 60000;
 			}
 			const difference = Math.abs(Date.now() - deltaMax.current);

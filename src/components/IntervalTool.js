@@ -37,12 +37,12 @@ export default function IntervalTool({ toggleInterval }) {
 	};
 
 	const startHandler = () => {
-		if (pauseTimestamp.current !== 0 && status.current == "Work") {
+		if (pauseTimestamp.current !== 0 && status.current === "Work") {
 			pauseElapsed.current = Math.abs(Date.now() - pauseTimestamp.current);
 			work.current += pauseElapsed.current;
 			pauseTimestamp.current = 0;
 			pauseElapsed.current = 0;
-		} else if (pauseTimestamp.current !== 0 && status.current == "Rest") {
+		} else if (pauseTimestamp.current !== 0 && status.current === "Rest") {
 			pauseElapsed.current = Math.abs(Date.now() - pauseTimestamp.current);
 			rest.current += pauseElapsed.current;
 			pauseTimestamp.current = 0;
@@ -53,7 +53,7 @@ export default function IntervalTool({ toggleInterval }) {
 
 		const animateWork = () => {
 			status.current = "Work";
-			if (work.current == 0) {
+			if (work.current === 0) {
 				work.current =
 					Date.now() + workInput.minutes * 60000 + workInput.seconds * 1000 + 1000;
 			}
@@ -80,7 +80,7 @@ export default function IntervalTool({ toggleInterval }) {
 
 		const animateRest = () => {
 			status.current = "Rest";
-			if (rest.current == 0) {
+			if (rest.current === 0) {
 				rest.current +=
 					Date.now() + restInput.minutes * 60000 + restInput.seconds * 1000 + 1000;
 				status.current = null;
@@ -101,9 +101,9 @@ export default function IntervalTool({ toggleInterval }) {
 			}
 		};
 
-		if (isCountdownPaused.current && status.current == "Work") {
+		if (isCountdownPaused.current && status.current === "Work") {
 			requestAnimationFrame(animateWork);
-		} else if (isCountdownPaused.current && status.current == "Rest") {
+		} else if (isCountdownPaused.current && status.current === "Rest") {
 			requestAnimationFrame(animateRest);
 		} else {
 			requestAnimationFrame(animateWork)
@@ -117,7 +117,7 @@ export default function IntervalTool({ toggleInterval }) {
 	}
 
 	const resetHandler = () => {
-		
+
 	}
 
 	return (

@@ -116,6 +116,10 @@ export default function IntervalTool({ toggleInterval }) {
 		console.log(status.current);
 	}
 
+	const resetHandler = () => {
+		
+	}
+
 	return (
 		<>
 			<div className="closeTool" onClick={toggleInterval}>
@@ -161,7 +165,7 @@ export default function IntervalTool({ toggleInterval }) {
 			<div>{countdown}</div>
 			<div onClick={startHandler}>Start</div>
 			<div onClick={pauseHandler}>Pause</div>
-			<div>Reset</div>
+			<div onClick={resetHandler}>Reset</div>
 		</>
 	);
 }

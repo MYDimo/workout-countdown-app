@@ -1,10 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ReactComponent as CloseIcon } from "../icons/close-icon.svg";
 import { ReactComponent as StartIcon } from "../icons/start-icon.svg";
 import { ReactComponent as PauseIcon } from "../icons/pause-icon.svg";
 
 export default function IntervalTool({ toggleInterval }) {
 	const [countdown, setCountdown] = useState("00:00:00");
+	const [roundsInput, setRoundsInput] = useState(0);
 	const [workInput, setWorkInput] = useState({
 		minutes: 0,
 		seconds: 0,
@@ -14,6 +15,7 @@ export default function IntervalTool({ toggleInterval }) {
 		seconds: 0,
 	});
 	const [isRunning, setIsRunning] = useState(false);
+	const [areInputsReady, setAreInputsReady] = useState(false);
 
 	const roundsTotal = useRef(0);
 	const roundAt = useRef(0);
@@ -26,17 +28,25 @@ export default function IntervalTool({ toggleInterval }) {
 
 	const roundsInputHandler = (e) => {
 		const inputValidation = /^\d+$/;
-		const input = e.target.value;
+
+		console.log(e.target.value);
 
 		if (inputValidation.test(e.target.value)) {
 			roundsTotal.current = +e.target.value;
+			setRoundsInput(+e.target.value);
 			e.target.style.color = "#216583";
 		} else {
 			e.target.style.color = "#6b655c";
-			e.target.value = e.target.value.slice(0, -1);
-			if (inputValidation.test(e.target.value)) {
-				roundsTotal.current = +e.target.value;
-				e.target.style.color = "#216583";
+
+			if (e.target.value) {
+				e.target.value = e.target.value.slice(0, -1);
+				if (inputValidation.test(e.target.value)) {
+					roundsTotal.current = +e.target.value;
+					e.target.style.color = "#216583";
+				}
+			} else {
+				roundsTotal.current = 0;
+				setRoundsInput(0);
 			}
 		}
 	};
@@ -53,13 +63,21 @@ export default function IntervalTool({ toggleInterval }) {
 			e.target.style.color = "#216583";
 		} else {
 			e.target.style.color = "#6b655c";
-			e.target.value = e.target.value.slice(0, -1);
-			if (inputValidation.test(e.target.value)) {
+
+			if (e.target.value) {
+				e.target.value = e.target.value.slice(0, -1);
+				if (inputValidation.test(e.target.value)) {
+					setWorkInput((existingValues) => ({
+						...existingValues,
+						[valueName]: +e.target.value,
+					}));
+					e.target.style.color = "#216583";
+				}
+			} else {
 				setWorkInput((existingValues) => ({
 					...existingValues,
-					[valueName]: +e.target.value,
+					[valueName]: 0,
 				}));
-				e.target.style.color = "#216583";
 			}
 		}
 	};
@@ -76,13 +94,21 @@ export default function IntervalTool({ toggleInterval }) {
 			e.target.style.color = "#216583";
 		} else {
 			e.target.style.color = "#6b655c";
-			e.target.value = e.target.value.slice(0, -1);
-			if (inputValidation.test(e.target.value)) {
+
+			if (e.target.value) {
+				e.target.value = e.target.value.slice(0, -1);
+				if (inputValidation.test(e.target.value)) {
+					setRestInput((existingValues) => ({
+						...existingValues,
+						[valueName]: +e.target.value,
+					}));
+					e.target.style.color = "#216583";
+				}
+			} else {
 				setRestInput((existingValues) => ({
 					...existingValues,
-					[valueName]: +e.target.value,
+					[valueName]: 0,
 				}));
-				e.target.style.color = "#216583";
 			}
 		}
 	};
@@ -197,6 +223,20 @@ export default function IntervalTool({ toggleInterval }) {
 		}
 	};
 
+	useEffect(() => {
+		if (
+			roundsInput &&
+			workInput.minutes &&
+			workInput.seconds &&
+			restInput.minutes &&
+			restInput.seconds
+		) {
+			setAreInputsReady(true);
+		} else {
+			setAreInputsReady(false);
+		}
+	}, [roundsInput, workInput, restInput]);
+
 	return (
 		<div className="toolBody">
 			{!isRunning && (
@@ -247,26 +287,19 @@ export default function IntervalTool({ toggleInterval }) {
 							/>
 						</div>
 					</div>
-					<div className="toolControlWrapper">
-						<StartIcon
-							id="startTool"
-							className={`toolControl ${
-								restInput.seconds !== 0 ? null : "dimmedActive"
-							}`}
-							alt="Start/Continue Countdown"
-							onClick={startHandler}
-						/>
-						<PauseIcon
-							id="pauseTool"
-							className={`toolControl ${
-								restInput.seconds !== 0 ? null : "dimmedActive"
-							}`}
-							alt="Pause Countdown"
-							onClick={pauseHandler}
-						/>
-					</div>
+						<div className="toolControlWrapper">
+							<StartIcon
+								id="startTool"
+								className={`toolControl ${
+									areInputsReady ? null : "dimmedActive disabled"
+								}`}
+								alt="Start/Continue Countdown"
+								onClick={startHandler}
+							/>
+						</div>
 				</>
 			)}
+
 			{isRunning && (
 				<>
 					<div>

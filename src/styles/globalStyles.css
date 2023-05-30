@@ -58,8 +58,8 @@ input {
 	border: none;
 	color: var(--text-dimmed);
 	border-bottom: 20px solid var(--accent);
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
 	font-family: "roboto", sans-serif;
 	font-weight: 900;
 	font-size: clamp(5vw, 5rem, 10vh);
@@ -73,50 +73,57 @@ input:focus {
 .closeTool {
 	cursor: pointer;
 	padding: 30px;
-  color: var(--text-dimmed);
-  transition: all 450ms ease-in-out;;
+	color: var(--text-dimmed);
+	transition: all 450ms ease-in-out;
+  place-self: center;
 }
 
 .closeTool:hover {
-  color: var(--blue);
-  transform: scale(1.4) rotate(360deg);
-  /* transform: rotate(360); */
+	color: var(--blue);
+	transform: scale(1.4) rotate(360deg);
+	/* transform: rotate(360); */
 }
 
 .toolControlWrapper {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+  place-self: center;
 }
 
 .toolControl {
 	cursor: pointer;
-  margin: 30px;
+	margin: 30px;
 }
 
 .dimmedActive {
 	color: var(--text-dimmed);
 }
 
+.disabled{
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
 .inputsMainWrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: flex-end;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	align-items: flex-end;
+  place-self: center;
 }
 
 .inputsMainWrapper input {
-  margin: 0px 10px;
-  height: 5rem;
+	margin: 0px 10px;
+	height: 5rem;
 }
 
 .inputsMainWrapper label {
-  font-family: "roboto", sans-serif;
+	font-family: "roboto", sans-serif;
 	font-weight: 900;
 	font-size: clamp(5vw, 5rem, 10vh);
 }
-
 
 button:hover {
 	transform: scale(1.5);
@@ -124,11 +131,11 @@ button:hover {
 }
 
 .countdownInputsWrapper {
-  width: inherit;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
+	width: inherit;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
 }
 
 .toolNavigator {
@@ -143,8 +150,14 @@ button:hover {
 .toolBody {
 	width: inherit;
 	height: inherit;
-	display: flex;
+	/* display: flex;
 	flex-direction: column;
 	justify-content: center;
-	align-items: center;
+	align-items: center; */
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: repeat(3, 1fr);
+  align-items: center;
+  justify-content: center;
+  align-content: center;
 }

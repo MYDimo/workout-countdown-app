@@ -1,0 +1,150 @@
+@import "normalize.css";
+@import url("https://fonts.googleapis.com/css2?family=roboto:wght@400;600;800&display=swap");
+
+:root {
+	--text: #ffe5b2;
+	--text-dimmed: #6b655c;
+	--accent: #f76262;
+	--blue: #216583;
+	--dark: #3c3e47;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+}
+
+body {
+	background-color: var(--dark);
+	color: var(--text);
+	margin: 0;
+	width: inherit;
+	height: inherit;
+}
+
+#root {
+	width: inherit;
+	height: inherit;
+}
+
+button {
+	font-family: "roboto", sans-serif;
+	font-weight: 900;
+	font-size: clamp(5vw, 5rem, 10vh);
+	background-color: transparent;
+	background-repeat: no-repeat;
+	border: none;
+	overflow: hidden;
+	outline: none;
+	color: var(--text);
+	line-height: clamp(5vw, 5rem, 10vh);
+
+	transition: all 450ms ease-in-out;
+	transition-property: transform, box-shadow;
+}
+
+h1 {
+	padding: 0;
+	margin: 0;
+	cursor: default;
+	font-family: "roboto", sans-serif;
+	font-weight: 900;
+	font-size: clamp(11vh, 15vw, 20rem);
+}
+
+input {
+	width: 8vw;
+	background-color: transparent;
+	border: none;
+	color: var(--text-dimmed);
+	border-bottom: 20px solid var(--accent);
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+	font-family: "roboto", sans-serif;
+	font-weight: 900;
+	font-size: clamp(5vw, 5rem, 10vh);
+	text-align: center;
+}
+
+input:focus {
+	outline: #f76262;
+}
+
+.closeTool {
+	cursor: pointer;
+	padding: 30px;
+  color: var(--text-dimmed);
+  transition: all 450ms ease-in-out;;
+}
+
+.closeTool:hover {
+  color: var(--blue);
+  transform: scale(1.4) rotate(360deg);
+  /* transform: rotate(360); */
+}
+
+.toolControlWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.toolControl {
+	cursor: pointer;
+  margin: 30px;
+}
+
+.dimmedActive {
+	color: var(--text-dimmed);
+}
+
+.inputsMainWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.inputsMainWrapper input {
+  margin: 0px 10px;
+  height: 5rem;
+}
+
+.inputsMainWrapper label {
+  font-family: "roboto", sans-serif;
+	font-weight: 900;
+	font-size: clamp(5vw, 5rem, 10vh);
+}
+
+
+button:hover {
+	transform: scale(1.5);
+	box-shadow: inset 0px -30px 0px 0px var(--blue);
+}
+
+.countdownInputsWrapper {
+  width: inherit;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.toolNavigator {
+	width: inherit;
+	height: inherit;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.toolBody {
+	width: inherit;
+	height: inherit;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}

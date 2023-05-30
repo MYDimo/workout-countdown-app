@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { ReactComponent as CloseIcon } from '../icons/close-icon.svg' 
 
 export default function ClockTool({ toggleClock }) {
 	const [currentTime, setTime] = useState(`00:00:00`);
@@ -21,12 +22,9 @@ export default function ClockTool({ toggleClock }) {
 	}, []);
 
 	return (
-		<>
-			<div className="closeTool" onClick={toggleClock}>
-				close me
-			</div>
-			<div>This is the clock tool</div>
-			<div>{currentTime}</div>
-		</>
+		<div className="toolBody">
+			<CloseIcon className="closeTool" onClick={toggleClock} alt="Back to main menu"/>
+			<h1>{currentTime}</h1>
+		</div>
 	);
 }

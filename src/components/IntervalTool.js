@@ -15,6 +15,7 @@ export default function IntervalTool({ toggleInterval }) {
 		seconds: 0,
 	});
 	const [isRunning, setIsRunning] = useState(false);
+	const [isPaused, setIsPaused] = useState(false);
 	const [areInputsReady, setAreInputsReady] = useState(false);
 
 	const roundsTotal = useRef(0);
@@ -114,8 +115,11 @@ export default function IntervalTool({ toggleInterval }) {
 	};
 
 	const startHandler = () => {
+		setIsPaused(true);
+
 		if (pauseTimestamp.current === 0) {
 			setIsRunning((oldValue) => !oldValue);
+			isCountdownPaused.current = true;
 		}
 
 		if (pauseTimestamp.current !== 0 && status.current === "Work") {
@@ -205,7 +209,8 @@ export default function IntervalTool({ toggleInterval }) {
 
 	const pauseHandler = () => {
 		pauseTimestamp.current = Date.now();
-		isCountdownPaused.current = true;
+		isCountdownPaused.current = false;
+		setIsPaused(false);
 	};
 
 	const resetHandler = (changeIsRunning) => {
@@ -219,7 +224,7 @@ export default function IntervalTool({ toggleInterval }) {
 		status.current = "Work";
 
 		if (changeIsRunning) {
-			setIsRunning((oldValue) => !oldValue);
+			setIsRunning(false);
 		}
 	};
 
@@ -287,34 +292,52 @@ export default function IntervalTool({ toggleInterval }) {
 							/>
 						</div>
 					</div>
-						<div className="toolControlWrapper">
-							<StartIcon
-								id="startTool"
-								className={`toolControl ${
-									areInputsReady ? null : "dimmedActive disabled"
-								}`}
-								alt="Start/Continue Countdown"
-								onClick={startHandler}
-							/>
-						</div>
 				</>
 			)}
 
 			{isRunning && (
 				<>
 					<div>
-						Countdown -{" "}
-						{roundAt.current === roundsTotal.current ? "Over" : status.current}
+						<h2>
+							R
+							{roundAt.current === roundsTotal.current
+								? roundsTotal.current
+								: roundAt.current + 1}
+							&nbsp;
+							<span>
+								{roundAt.current === roundsTotal.current
+									? "Over"
+									: status.current}
+							</span>
+						</h2>
 					</div>
-					<div>
-						Round -{" "}
-						{roundAt.current === roundsTotal.current
-							? roundsTotal.current
-							: roundAt.current + 1}
-					</div>
-					<div>{countdown}</div>
+					<h1>{countdown}</h1>
 					<div onClick={() => resetHandler(true)}>Reset</div>
 				</>
+			)}
+
+			{isPaused ? (
+				<div className="toolControlWrapper">
+					<PauseIcon
+						id="pauseTool"
+						className={`toolControl ${
+							areInputsReady ? null : "dimmedActive disabled"
+						}`}
+						alt="Start/Continue Countdown"
+						onClick={pauseHandler}
+					/>
+				</div>
+			) : (
+				<div className="toolControlWrapper">
+					<StartIcon
+						id="startTool"
+						className={`toolControl ${
+							areInputsReady ? null : "dimmedActive disabled"
+						}`}
+						alt="Start/Continue Countdown"
+						onClick={startHandler}
+					/>
+				</div>
 			)}
 		</div>
 	);

@@ -28,7 +28,7 @@ body {
 }
 
 button {
-	font-family: "roboto", sans-serif;
+	font-family: "arial", sans-serif;
 	font-weight: 900;
 	font-size: clamp(5vw, 5rem, 10vh);
 	background-color: transparent;
@@ -43,13 +43,32 @@ button {
 	transition-property: transform, box-shadow;
 }
 
-h1 {
+h1, h2, h3 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-family: "arial", sans-serif;
+	font-weight: 900;
 	padding: 0;
 	margin: 0;
 	cursor: default;
-	font-family: "roboto", sans-serif;
-	font-weight: 900;
+}
+
+h1 {
 	font-size: clamp(11vh, 15vw, 20rem);
+}
+
+h2 {
+	font-size: clamp(5vh, 8vw, 14rem);
+  color: var(--blue);
+  text-align: center;
+  vertical-align: center;
+}
+
+h2 span {
+  text-transform: lowercase;
+  font-size: clamp(2vh, 4vw, 12rem);
+  color: var(--text);
 }
 
 input {
@@ -75,7 +94,6 @@ input:focus {
 	padding: 30px;
 	color: var(--text-dimmed);
 	transition: all 450ms ease-in-out;
-  place-self: center;
 }
 
 .closeTool:hover {
@@ -89,7 +107,6 @@ input:focus {
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
-  place-self: center;
 }
 
 .toolControl {
@@ -111,7 +128,6 @@ input:focus {
 	flex-direction: column;
 	justify-content: flex-end;
 	align-items: flex-end;
-  place-self: center;
 }
 
 .inputsMainWrapper input {
@@ -160,4 +176,8 @@ button:hover {
   align-items: center;
   justify-content: center;
   align-content: center;
+}
+
+.toolBody * {
+  place-self: center;
 }

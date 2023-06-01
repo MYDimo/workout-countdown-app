@@ -2,17 +2,18 @@ import React, { useEffect, useRef, useState } from "react";
 import { ReactComponent as CloseIcon } from "../icons/close-icon.svg";
 import { ReactComponent as StartIcon } from "../icons/start-icon.svg";
 import { ReactComponent as PauseIcon } from "../icons/pause-icon.svg";
+import { ReactComponent as BackIcon } from "../icons/back-icon.svg";
 
 export default function IntervalTool({ toggleInterval }) {
 	const [countdown, setCountdown] = useState("00:00:00");
-	const [roundsInput, setRoundsInput] = useState(0);
+	const [roundsInput, setRoundsInput] = useState(null);
 	const [workInput, setWorkInput] = useState({
-		minutes: 0,
-		seconds: 0,
+		minutes: null,
+		seconds: null,
 	});
 	const [restInput, setRestInput] = useState({
-		minutes: 0,
-		seconds: 0,
+		minutes: null,
+		seconds: null,
 	});
 	const [isRunning, setIsRunning] = useState(false);
 	const [isPaused, setIsPaused] = useState(false);
@@ -26,11 +27,11 @@ export default function IntervalTool({ toggleInterval }) {
 	const pauseElapsed = useRef(0);
 	const isCountdownPaused = useRef(false);
 	const status = useRef("Work");
+	const workAnimateId = useRef(null);
+	const reset = useRef(false);
 
 	const roundsInputHandler = (e) => {
 		const inputValidation = /^\d+$/;
-
-		console.log(e.target.value);
 
 		if (inputValidation.test(e.target.value)) {
 			roundsTotal.current = +e.target.value;
@@ -47,7 +48,7 @@ export default function IntervalTool({ toggleInterval }) {
 				}
 			} else {
 				roundsTotal.current = 0;
-				setRoundsInput(0);
+				setRoundsInput(null);
 			}
 		}
 	};
@@ -77,7 +78,7 @@ export default function IntervalTool({ toggleInterval }) {
 			} else {
 				setWorkInput((existingValues) => ({
 					...existingValues,
-					[valueName]: 0,
+					[valueName]: null,
 				}));
 			}
 		}
@@ -108,7 +109,7 @@ export default function IntervalTool({ toggleInterval }) {
 			} else {
 				setRestInput((existingValues) => ({
 					...existingValues,
-					[valueName]: 0,
+					[valueName]: null,
 				}));
 			}
 		}
@@ -118,7 +119,7 @@ export default function IntervalTool({ toggleInterval }) {
 		setIsPaused(true);
 
 		if (pauseTimestamp.current === 0) {
-			setIsRunning((oldValue) => !oldValue);
+			setIsRunning(true);
 			isCountdownPaused.current = true;
 		}
 
@@ -134,13 +135,6 @@ export default function IntervalTool({ toggleInterval }) {
 			pauseElapsed.current = 0;
 		}
 
-		console.log(
-			roundAt.current,
-			roundsTotal.current,
-			isRunning,
-			pauseTimestamp.current
-		);
-
 		const animateWork = () => {
 			status.current = "Work";
 			if (work.current === 0) {
@@ -152,23 +146,23 @@ export default function IntervalTool({ toggleInterval }) {
 			}
 			const timeDiff = Math.abs(Date.now() - work.current);
 			const timeDiffConverted = new Date(timeDiff).toISOString().slice(11, 19);
-			setCountdown(() => timeDiffConverted);
+			setCountdown(timeDiffConverted);
 
-			let workAnimateId = requestAnimationFrame(animateWork);
+			workAnimateId.current = requestAnimationFrame(animateWork);
 			if (roundAt.current === roundsTotal.current) {
-				cancelAnimationFrame(workAnimateId);
+				cancelAnimationFrame(workAnimateId.current);
 				setCountdown("00:00:00");
 				work.current = 0;
 				rest.current = 0;
-				status.current = null;
-				resetHandler(false);
+				status.current = "Work";
+				reset.current = false;
 			} else if (timeDiffConverted === "00:00:00") {
 				work.current = 0;
-				cancelAnimationFrame(workAnimateId);
+				cancelAnimationFrame(workAnimateId.current);
 				requestAnimationFrame(animateRest);
 			}
 			if (pauseTimestamp.current) {
-				cancelAnimationFrame(workAnimateId);
+				cancelAnimationFrame(workAnimateId.current);
 			}
 		};
 
@@ -198,6 +192,10 @@ export default function IntervalTool({ toggleInterval }) {
 			}
 		};
 
+		if (reset) {
+			cancelAnimationFrame(workAnimateId.current);
+		}
+
 		if (isCountdownPaused.current && status.current === "Work") {
 			requestAnimationFrame(animateWork);
 		} else if (isCountdownPaused.current && status.current === "Rest") {
@@ -211,36 +209,36 @@ export default function IntervalTool({ toggleInterval }) {
 		pauseTimestamp.current = Date.now();
 		isCountdownPaused.current = false;
 		setIsPaused(false);
+		reset.current = false;
 	};
 
-	const resetHandler = (changeIsRunning) => {
-		roundsTotal.current = 0;
-		roundAt.current = 0;
+	const resetHandler = () => {
 		work.current = 0;
 		rest.current = 0;
 		pauseTimestamp.current = 0;
-		pauseElapsed.current = 0;
-		isCountdownPaused.current = false;
 		status.current = "Work";
-
-		if (changeIsRunning) {
-			setIsRunning(false);
-		}
+		reset.current = true;
+		setIsPaused(false);
+		setIsRunning(false);
 	};
 
 	useEffect(() => {
+		checkInputs();
+	}, [roundsInput, workInput, restInput]);
+
+	const checkInputs = () => {
 		if (
-			roundsInput &&
-			workInput.minutes &&
-			workInput.seconds &&
-			restInput.minutes &&
-			restInput.seconds
+			roundsInput !== null &&
+			workInput.minutes !== null &&
+			workInput.seconds !== null &&
+			restInput.minutes !== null &&
+			restInput.seconds !== null
 		) {
 			setAreInputsReady(true);
 		} else {
 			setAreInputsReady(false);
 		}
-	}, [roundsInput, workInput, restInput]);
+	};
 
 	return (
 		<div className="toolBody">
@@ -255,39 +253,50 @@ export default function IntervalTool({ toggleInterval }) {
 						<div className="roundInputWrapper">
 							<label htmlFor="rounds">rounds</label>
 							<input
+								className={areInputsReady ? "activeTextColor" : null}
 								min="0"
 								placeholder="#"
 								name="rounds"
+								value={roundsInput !== null ? `${roundsInput}` : ""}
+								autoFocus
 								onChange={(e) => roundsInputHandler(e)}
 							/>
 						</div>
 						<div className="workInputWrapper">
 							<label htmlFor="rounds">work</label>
 							<input
+								className={areInputsReady ? "activeTextColor" : null}
 								min="0"
 								placeholder="m"
 								name="minutes"
+								value={workInput.minutes !== null ? `${workInput.minutes}` : ""}
 								onChange={(e) => workInputHandler(e)}
 							/>
 							<input
+								className={areInputsReady ? "activeTextColor" : null}
 								min="0"
 								placeholder="s"
 								name="seconds"
+								value={workInput.seconds !== null ? `${workInput.seconds}` : ""}
 								onChange={(e) => workInputHandler(e)}
 							/>
 						</div>
 						<div className="restInputWrapper">
 							<label htmlFor="rounds">rest</label>
 							<input
+								className={areInputsReady ? "activeTextColor" : null}
 								min="0"
 								placeholder="m"
 								name="minutes"
+								value={restInput.minutes !== null ? `${restInput.minutes}` : ""}
 								onChange={(e) => restInputHandler(e)}
 							/>
 							<input
+								className={areInputsReady ? "activeTextColor" : null}
 								min="0"
 								placeholder="s"
 								name="seconds"
+								value={restInput.seconds !== null ? `${restInput.seconds}` : ""}
 								onChange={(e) => restInputHandler(e)}
 							/>
 						</div>
@@ -297,6 +306,12 @@ export default function IntervalTool({ toggleInterval }) {
 
 			{isRunning && (
 				<>
+					<BackIcon
+						id="backIcon"
+						className={`toolControl`}
+						alt="Back to change numbers"
+						onClick={() => resetHandler()}
+					/>
 					<div>
 						<h2>
 							R
@@ -312,7 +327,6 @@ export default function IntervalTool({ toggleInterval }) {
 						</h2>
 					</div>
 					<h1>{countdown}</h1>
-					<div onClick={() => resetHandler(true)}>Reset</div>
 				</>
 			)}
 
@@ -330,7 +344,8 @@ export default function IntervalTool({ toggleInterval }) {
 			) : (
 				<div className="toolControlWrapper">
 					<StartIcon
-						id="startTool"
+						tabindex="0"
+						id="startIcon"
 						className={`toolControl ${
 							areInputsReady ? null : "dimmedActive disabled"
 						}`}

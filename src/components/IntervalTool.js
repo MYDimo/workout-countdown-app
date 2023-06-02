@@ -254,7 +254,7 @@ export default function IntervalTool({ toggleInterval }) {
 						<div className="roundInputWrapper">
 							<label htmlFor="rounds">rounds</label>
 							<input
-								className={areInputsReady ? "activeTextColor" : null}
+								className={roundsInput ? "activeTextColor" : null}
 								min="0"
 								placeholder="#"
 								name="rounds"
@@ -266,7 +266,7 @@ export default function IntervalTool({ toggleInterval }) {
 						<div className="workInputWrapper">
 							<label htmlFor="rounds">work</label>
 							<input
-								className={areInputsReady ? "activeTextColor" : null}
+								className={workInput.minutes ? "activeTextColor" : null}
 								min="0"
 								placeholder="m"
 								name="minutes"
@@ -274,7 +274,7 @@ export default function IntervalTool({ toggleInterval }) {
 								onChange={(e) => workInputHandler(e)}
 							/>
 							<input
-								className={areInputsReady ? "activeTextColor" : null}
+								className={workInput.seconds ? "activeTextColor" : null}
 								min="0"
 								placeholder="s"
 								name="seconds"
@@ -285,7 +285,7 @@ export default function IntervalTool({ toggleInterval }) {
 						<div className="restInputWrapper">
 							<label htmlFor="rounds">rest</label>
 							<input
-								className={areInputsReady ? "activeTextColor" : null}
+								className={restInput.minutes ? "activeTextColor" : null}
 								min="0"
 								placeholder="m"
 								name="minutes"
@@ -293,7 +293,7 @@ export default function IntervalTool({ toggleInterval }) {
 								onChange={(e) => restInputHandler(e)}
 							/>
 							<input
-								className={areInputsReady ? "activeTextColor" : null}
+								className={restInput.seconds ? "activeTextColor" : null}
 								min="0"
 								placeholder="s"
 								name="seconds"

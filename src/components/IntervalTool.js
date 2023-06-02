@@ -117,6 +117,7 @@ export default function IntervalTool({ toggleInterval }) {
 
 	const startHandler = () => {
 		setIsPaused(true);
+		reset.current = false;
 
 		if (pauseTimestamp.current === 0) {
 			setIsRunning(true);
@@ -145,18 +146,19 @@ export default function IntervalTool({ toggleInterval }) {
 					1000;
 			}
 			const timeDiff = Math.abs(Date.now() - work.current);
-			const timeDiffConverted = new Date(timeDiff).toISOString().slice(11, 19);
+			const timeDiffConverted = new Date(timeDiff).toISOString().slice(14, 19);
 			setCountdown(timeDiffConverted);
 
+			console.log(timeDiffConverted, timeDiff);
 			workAnimateId.current = requestAnimationFrame(animateWork);
-			if (roundAt.current === roundsTotal.current) {
+			if (roundAt.current === roundsTotal.current || reset.current) {
 				cancelAnimationFrame(workAnimateId.current);
-				setCountdown("00:00:00");
+				setCountdown("00:00");
 				work.current = 0;
 				rest.current = 0;
 				status.current = "Work";
 				reset.current = false;
-			} else if (timeDiffConverted === "00:00:00") {
+			} else if (timeDiff <= 50) {
 				work.current = 0;
 				cancelAnimationFrame(workAnimateId.current);
 				requestAnimationFrame(animateRest);
@@ -177,11 +179,11 @@ export default function IntervalTool({ toggleInterval }) {
 				status.current = null;
 			}
 			const timeDiff = Math.abs(Date.now() - rest.current);
-			const timeDiffConverted = new Date(timeDiff).toISOString().slice(11, 19);
+			const timeDiffConverted = new Date(timeDiff).toISOString().slice(14, 19);
 			setCountdown(() => timeDiffConverted);
 
 			let restAnimateId = requestAnimationFrame(animateRest);
-			if (timeDiffConverted === "00:00:00") {
+			if (timeDiff <= 50) {
 				rest.current = 0;
 				cancelAnimationFrame(restAnimateId);
 				requestAnimationFrame(animateWork);
@@ -191,10 +193,6 @@ export default function IntervalTool({ toggleInterval }) {
 				cancelAnimationFrame(restAnimateId);
 			}
 		};
-
-		if (reset) {
-			cancelAnimationFrame(workAnimateId.current);
-		}
 
 		if (isCountdownPaused.current && status.current === "Work") {
 			requestAnimationFrame(animateWork);
@@ -218,6 +216,7 @@ export default function IntervalTool({ toggleInterval }) {
 		pauseTimestamp.current = 0;
 		status.current = "Work";
 		reset.current = true;
+		roundAt.current = 0;
 		setIsPaused(false);
 		setIsRunning(false);
 	};
@@ -245,7 +244,7 @@ export default function IntervalTool({ toggleInterval }) {
 			{!isRunning && (
 				<>
 					<CloseIcon
-						tabindex="0"
+						tabIndex="0"
 						className="closeTool"
 						onClick={toggleInterval}
 						alt="Go back icon"
@@ -254,7 +253,7 @@ export default function IntervalTool({ toggleInterval }) {
 						<div className="roundInputWrapper">
 							<label htmlFor="rounds">rounds</label>
 							<input
-								className={roundsInput ? "activeTextColor" : null}
+								className={roundsInput !== null ? "activeTextColor" : null}
 								min="0"
 								placeholder="#"
 								name="rounds"
@@ -266,7 +265,7 @@ export default function IntervalTool({ toggleInterval }) {
 						<div className="workInputWrapper">
 							<label htmlFor="rounds">work</label>
 							<input
-								className={workInput.minutes ? "activeTextColor" : null}
+								className={workInput.minutes !== null ? "activeTextColor" : null}
 								min="0"
 								placeholder="m"
 								name="minutes"
@@ -274,7 +273,7 @@ export default function IntervalTool({ toggleInterval }) {
 								onChange={(e) => workInputHandler(e)}
 							/>
 							<input
-								className={workInput.seconds ? "activeTextColor" : null}
+								className={workInput.seconds !== null ? "activeTextColor" : null}
 								min="0"
 								placeholder="s"
 								name="seconds"
@@ -285,7 +284,7 @@ export default function IntervalTool({ toggleInterval }) {
 						<div className="restInputWrapper">
 							<label htmlFor="rounds">rest</label>
 							<input
-								className={restInput.minutes ? "activeTextColor" : null}
+								className={restInput.minutes !== null ? "activeTextColor" : null}
 								min="0"
 								placeholder="m"
 								name="minutes"
@@ -293,7 +292,7 @@ export default function IntervalTool({ toggleInterval }) {
 								onChange={(e) => restInputHandler(e)}
 							/>
 							<input
-								className={restInput.seconds ? "activeTextColor" : null}
+								className={restInput.seconds !== null ? "activeTextColor" : null}
 								min="0"
 								placeholder="s"
 								name="seconds"
@@ -308,7 +307,7 @@ export default function IntervalTool({ toggleInterval }) {
 			{isRunning && (
 				<>
 					<BackIcon
-						tabindex="0"
+						tabIndex="0"
 						id="backIcon"
 						className={`toolControl`}
 						alt="Back to change numbers"
@@ -335,7 +334,7 @@ export default function IntervalTool({ toggleInterval }) {
 			{isPaused ? (
 				<div className="toolControlWrapper">
 					<PauseIcon
-						tabindex="0"
+						tabIndex="0"
 						id="pauseIcon"
 						className={`toolControl ${
 							areInputsReady ? null : "dimmedActive disabled"
@@ -347,7 +346,7 @@ export default function IntervalTool({ toggleInterval }) {
 			) : (
 				<div className="toolControlWrapper">
 					<StartIcon
-						tabindex={areInputsReady ? "0" : null}
+						tabIndex={areInputsReady ? "0" : null}
 						id="startIcon"
 						className={`toolControl ${
 							areInputsReady ? null : "dimmedActive disabled"

@@ -1,18 +1,31 @@
-import React, { useState, useRef } from "react";
-import { ReactComponent as CloseIcon } from '../icons/close-icon.svg' 
+import React, { useState, useRef, useEffect } from "react";
+import { ReactComponent as CloseIcon } from "../icons/close-icon.svg";
 import { ReactComponent as StartIcon } from "../icons/start-icon.svg";
 import { ReactComponent as PauseIcon } from "../icons/pause-icon.svg";
+import { ReactComponent as BackIcon } from "../icons/back-icon.svg";
 
 export default function CountdownTool({ toggleCountdown }) {
-	const [input, setInput] = useState(null);
 	const [countdown, setCountdown] = useState(`00:00:00`);
+	const [isPaused, setIsPaused] = useState(false);
+	const [inputTime, setInputTime] = useState({
+		hours: null,
+		minutes: null,
+		seconds: null,
+	});
+	const [areInputsReady, setAreInputsReady] = useState(false);
+	const [isRunning, setIsRunning] = useState(false);
 
 	const deltaMax = useRef(0);
 	const pause = useRef(false);
 	const pauseTimestamp = useRef(0);
 	const pauseElapsed = useRef(0);
+	const goBackToInputs = useRef(false);
 
 	const countDownStart = () => {
+		setIsRunning(true);
+		goBackToInputs.current = false;
+		setIsPaused(true);
+
 		if (pause.current) {
 			pause.current = false;
 		}
@@ -24,7 +37,12 @@ export default function CountdownTool({ toggleCountdown }) {
 
 		const animate = () => {
 			if (deltaMax.current === 0) {
-				deltaMax.current = Date.now() + input * 60000;
+				deltaMax.current =
+					Date.now() +
+					inputTime.minutes * 60000 +
+					inputTime.seconds * 1000 +
+					1000 +
+					inputTime.hours * 3600000;
 			}
 			const difference = Math.abs(Date.now() - deltaMax.current);
 			const differenceConverted = new Date(difference)
@@ -37,6 +55,10 @@ export default function CountdownTool({ toggleCountdown }) {
 				cancelAnimationFrame(countDownId);
 				pauseTimestamp.current = Date.now();
 			}
+			if (goBackToInputs.current) {
+				cancelAnimationFrame(countDownId);
+				deltaMax.current = 0;
+			}
 		};
 
 		let countDownId = requestAnimationFrame(animate);
@@ -46,32 +68,121 @@ export default function CountdownTool({ toggleCountdown }) {
 	};
 
 	const inputHandler = (e) => {
-		setInput(+e.target.value);
+		const inputName = e.target.name;
+		const inputValidation = /\d+/;
+
+		if (inputValidation.test(e.target.value)) {
+			setInputTime((oldValue) => ({
+				...oldValue,
+				[inputName]: +e.target.value,
+			}));
+			e.target.style.color = "#ffe5b2";
+		} else {
+			setInputTime((oldValue) => ({ ...oldValue, [inputName]: null }));
+			e.target.style.color = "#6b655c";
+		}
 	};
 
 	const pauseCountdown = () => {
 		pause.current = true;
+		setIsPaused(false);
+	};
+
+	const checkInputs = () => {
+		if (
+			inputTime.hours !== null &&
+			inputTime.minutes !== null &&
+			inputTime.seconds !== null
+		) {
+			setAreInputsReady(true);
+		} else {
+			setAreInputsReady(false);
+		}
+	};
+
+	useEffect(() => {
+		checkInputs();
+	}, [inputTime]);
+
+	const backHandler = () => {
+		deltaMax.current = 0;
+		pauseTimestamp.current = 0;
+		pauseElapsed.current = 0;
+		goBackToInputs.current = true;
+		setIsRunning(false);
+		setIsPaused(false);
 	};
 
 	return (
 		<div className="toolBody">
-			<CloseIcon
-				className="closeTool"
-				onClick={toggleCountdown}
-				alt="Go back icon"
-			/>
-			<div className="countdownInputsWrapper">
-				<input placeholder={`h`} onChange={(e) => inputHandler(e)} />
-				<h2>:</h2>
-				<input placeholder={`m`} onChange={(e) => inputHandler(e)} />
-				<h2>:</h2>
-				<input placeholder={`s`} onChange={(e) => inputHandler(e)} />
-			</div>
-			<div className="toolControlWrapper">
-				<StartIcon id="startTool" className={`toolControl ${input ? null : "dimmedActive" }`} alt="Start/Continue Countdown" onClick={countDownStart}/>
-				<PauseIcon id="pauseTool" className={`toolControl ${input ? null : "dimmedActive" }`} alt="Pause Countdown" onClick={pauseCountdown}/>
-			</div>
-			{countdown !== "00:00:00" && <div>{countdown}</div>}
+			{isRunning ? (
+				<>
+					<BackIcon
+						tabIndex="0"
+						id="backIcon"
+						className={`toolControl`}
+						alt="Back to change numbers"
+						onClick={() => backHandler()}
+					/>
+					<h1>{countdown}</h1>
+				</>
+			) : (
+				<>
+					<CloseIcon
+						className="closeTool"
+						onClick={toggleCountdown}
+						alt="Go back icon"
+					/>
+					<div className="countdownInputsWrapper">
+						<input
+							className={inputTime.hours !== null ? "activeTextColor" : null}
+							placeholder="h"
+							name="hours"
+							autoFocus
+							value={inputTime.hours !== null ? `${inputTime.hours}` : ""}
+							onChange={(e) => inputHandler(e)}
+						/>
+						<h2>:</h2>
+						<input
+							className={inputTime.minutes !== null ? "activeTextColor" : null}
+							placeholder="m"
+							name="minutes"
+							value={inputTime.minutes !== null ? `${inputTime.minutes}` : ""}
+							onChange={(e) => inputHandler(e)}
+						/>
+						<h2>:</h2>
+						<input
+							className={inputTime.seconds !== null ? "activeTextColor" : null}
+							placeholder="s"
+							name="seconds"
+							value={inputTime.seconds !== null ? `${inputTime.seconds}` : ""}
+							onChange={(e) => inputHandler(e)}
+						/>
+					</div>
+				</>
+			)}
+
+			{isPaused ? (
+				<div className="toolControlWrapper">
+					<PauseIcon
+						id="pauseIcon"
+						className={`toolControl ${areInputsReady ? null : "dimmedActive"}`}
+						alt="Pause Countdown"
+						tabIndex="0"
+						onClick={pauseCountdown}
+					/>
+				</div>
+			) : (
+				<div className="toolControlWrapper">
+					<StartIcon
+						id="startIcon"
+						className={`toolControl ${areInputsReady ? null : "dimmedActive"}`}
+						alt="Start/Continue Countdown"
+						tabIndex="0"
+						onClick={countDownStart}
+					/>
+				</div>
+			)}
 		</div>
 	);
 }

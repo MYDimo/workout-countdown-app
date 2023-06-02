@@ -119,12 +119,15 @@ input:focus {
 	margin: 30px;
 }
 
-#startIcon, #pauseIcon {
+#startIcon,
+#pauseIcon {
 	transition: all 350ms linear;
 }
 
 #startIcon:focus,
-#startIcon:hover, #pauseIcon:focus, #pauseIcon:hover {
+#startIcon:hover,
+#pauseIcon:focus,
+#pauseIcon:hover {
 	transform: scale(1.4);
 	outline: none;
 	color: var(--accent);
@@ -134,8 +137,12 @@ input:focus {
 	color: var(--text-dimmed);
 }
 
-.activeTextColor {
+.activeTextColorBlue {
 	color: var(--blue);
+}
+
+.activeTextColor {
+	color: var(--text);
 }
 
 .disabled {
@@ -144,10 +151,9 @@ input:focus {
 }
 
 .inputsMainWrapper {
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-end;
-	align-items: flex-end;
+	display: grid;
+	grid-template-rows: repeat(3, 1fr);
+  justify-items: end;
 }
 
 .inputsMainWrapper input {
@@ -186,18 +192,15 @@ button:hover {
 .toolBody {
 	width: inherit;
 	height: inherit;
-	/* display: flex;
+	display: flex;
 	flex-direction: column;
-	justify-content: center;
-	align-items: center; */
-	display: grid;
+	justify-content: space-around;
+	align-items: center;
+	/* display: grid;
 	grid-template-columns: 1fr;
 	grid-template-rows: repeat(3, 1fr);
 	align-items: center;
 	justify-content: center;
-	align-content: center;
+	align-content: center; */
 }
 
-.toolBody * {
-	place-self: center;
-}

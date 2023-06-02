@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ClockTool from "./ClockTool";
 import CountdownTool from "./CountdownTool";
 import IntervalTool from "./IntervalTool";

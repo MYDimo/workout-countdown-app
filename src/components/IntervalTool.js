@@ -30,6 +30,21 @@ export default function IntervalTool({ toggleInterval }) {
 	const workAnimateId = useRef(null);
 	const reset = useRef(false);
 
+
+	useEffect(() => {
+		if (
+			roundsInput !== null &&
+			workInput.minutes !== null &&
+			workInput.seconds !== null &&
+			restInput.minutes !== null &&
+			restInput.seconds !== null
+		) {
+			setAreInputsReady(true);
+		} else {
+			setAreInputsReady(false);
+		}
+	}, [roundsInput, workInput, restInput]);
+
 	const roundsInputHandler = (e) => {
 		const inputValidation = /^\d+$/;
 
@@ -219,24 +234,6 @@ export default function IntervalTool({ toggleInterval }) {
 		roundAt.current = 0;
 		setIsPaused(false);
 		setIsRunning(false);
-	};
-
-	useEffect(() => {
-		checkInputs();
-	}, [roundsInput, workInput, restInput]);
-
-	const checkInputs = () => {
-		if (
-			roundsInput !== null &&
-			workInput.minutes !== null &&
-			workInput.seconds !== null &&
-			restInput.minutes !== null &&
-			restInput.seconds !== null
-		) {
-			setAreInputsReady(true);
-		} else {
-			setAreInputsReady(false);
-		}
 	};
 
 	return (

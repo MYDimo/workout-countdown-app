@@ -21,6 +21,18 @@ export default function CountdownTool({ toggleCountdown }) {
 	const pauseElapsed = useRef(0);
 	const goBackToInputs = useRef(false);
 
+	useEffect(() => {
+		if (
+			inputTime.hours !== null &&
+			inputTime.minutes !== null &&
+			inputTime.seconds !== null
+		) {
+			setAreInputsReady(true);
+		} else {
+			setAreInputsReady(false);
+		}
+	}, [inputTime]);
+
 	const countDownStart = () => {
 		setIsRunning(true);
 		goBackToInputs.current = false;
@@ -87,22 +99,6 @@ export default function CountdownTool({ toggleCountdown }) {
 		pause.current = true;
 		setIsPaused(false);
 	};
-
-	const checkInputs = () => {
-		if (
-			inputTime.hours !== null &&
-			inputTime.minutes !== null &&
-			inputTime.seconds !== null
-		) {
-			setAreInputsReady(true);
-		} else {
-			setAreInputsReady(false);
-		}
-	};
-
-	useEffect(() => {
-		checkInputs();
-	}, [inputTime]);
 
 	const backHandler = () => {
 		deltaMax.current = 0;

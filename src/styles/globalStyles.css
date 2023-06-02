@@ -43,11 +43,13 @@ button {
 	transition-property: transform, box-shadow;
 }
 
-h1, h2, h3 {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  font-family: "arial", sans-serif;
+h1,
+h2,
+h3 {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	font-family: "arial", sans-serif;
 	font-weight: 900;
 	padding: 0;
 	margin: 0;
@@ -60,15 +62,15 @@ h1 {
 
 h2 {
 	font-size: clamp(5vh, 8vw, 14rem);
-  color: var(--blue);
-  text-align: center;
-  vertical-align: center;
+	color: var(--blue);
+	text-align: center;
+	vertical-align: center;
 }
 
 h2 span {
-  text-transform: lowercase;
-  font-size: clamp(2vh, 4vw, 12rem);
-  color: var(--text);
+	text-transform: lowercase;
+	font-size: clamp(2vh, 4vw, 12rem);
+	color: var(--text);
 }
 
 input {
@@ -96,9 +98,12 @@ input:focus {
 	transition: all 450ms ease-in-out;
 }
 
-.closeTool:hover {
+.closeTool:hover,
+.closeTool:focus {
 	color: var(--blue);
 	transform: scale(1.4) rotate(360deg);
+	border: none;
+	outline: none;
 	/* transform: rotate(360); */
 }
 
@@ -114,9 +119,15 @@ input:focus {
 	margin: 30px;
 }
 
-#startIcon:focus {
-  outline: none;
-  color: var(--accent);
+#startIcon, #pauseIcon {
+	transition: all 350ms linear;
+}
+
+#startIcon:focus,
+#startIcon:hover, #pauseIcon:focus, #pauseIcon:hover {
+	transform: scale(1.4);
+	outline: none;
+	color: var(--accent);
 }
 
 .dimmedActive {
@@ -124,12 +135,12 @@ input:focus {
 }
 
 .activeTextColor {
-  color: var(--blue);
+	color: var(--blue);
 }
 
-.disabled{
-  pointer-events: none;
-  cursor: not-allowed;
+.disabled {
+	pointer-events: none;
+	cursor: not-allowed;
 }
 
 .inputsMainWrapper {
@@ -182,11 +193,11 @@ button:hover {
 	display: grid;
 	grid-template-columns: 1fr;
 	grid-template-rows: repeat(3, 1fr);
-  align-items: center;
-  justify-content: center;
-  align-content: center;
+	align-items: center;
+	justify-content: center;
+	align-content: center;
 }
 
 .toolBody * {
-  place-self: center;
+	place-self: center;
 }

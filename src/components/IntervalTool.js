@@ -245,6 +245,7 @@ export default function IntervalTool({ toggleInterval }) {
 			{!isRunning && (
 				<>
 					<CloseIcon
+						tabindex="0"
 						className="closeTool"
 						onClick={toggleInterval}
 						alt="Go back icon"
@@ -307,6 +308,7 @@ export default function IntervalTool({ toggleInterval }) {
 			{isRunning && (
 				<>
 					<BackIcon
+						tabindex="0"
 						id="backIcon"
 						className={`toolControl`}
 						alt="Back to change numbers"
@@ -333,7 +335,8 @@ export default function IntervalTool({ toggleInterval }) {
 			{isPaused ? (
 				<div className="toolControlWrapper">
 					<PauseIcon
-						id="pauseTool"
+						tabindex="0"
+						id="pauseIcon"
 						className={`toolControl ${
 							areInputsReady ? null : "dimmedActive disabled"
 						}`}
@@ -344,7 +347,7 @@ export default function IntervalTool({ toggleInterval }) {
 			) : (
 				<div className="toolControlWrapper">
 					<StartIcon
-						tabindex="0"
+						tabindex={areInputsReady ? "0" : null}
 						id="startIcon"
 						className={`toolControl ${
 							areInputsReady ? null : "dimmedActive disabled"

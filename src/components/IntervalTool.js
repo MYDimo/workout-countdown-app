@@ -5,7 +5,7 @@ import { ReactComponent as PauseIcon } from "../icons/pause-icon.svg";
 import { ReactComponent as BackIcon } from "../icons/back-icon.svg";
 
 export default function IntervalTool({ toggleInterval }) {
-	const [countdown, setCountdown] = useState("00:00:00");
+	const [countdown, setCountdown] = useState("00:00");
 	const [roundsInput, setRoundsInput] = useState(null);
 	const [workInput, setWorkInput] = useState({
 		minutes: null,
@@ -29,7 +29,6 @@ export default function IntervalTool({ toggleInterval }) {
 	const status = useRef("Work");
 	const workAnimateId = useRef(null);
 	const reset = useRef(false);
-
 
 	useEffect(() => {
 		if (
@@ -250,7 +249,7 @@ export default function IntervalTool({ toggleInterval }) {
 						<div className="roundInputWrapper">
 							<label htmlFor="rounds">rounds</label>
 							<input
-								className={roundsInput !== null ? "activeTextColor" : null}
+								className={roundsInput !== null ? "activeTextColorBlue" : null}
 								min="0"
 								placeholder="#"
 								name="rounds"
@@ -262,7 +261,9 @@ export default function IntervalTool({ toggleInterval }) {
 						<div className="workInputWrapper">
 							<label htmlFor="rounds">work</label>
 							<input
-								className={workInput.minutes !== null ? "activeTextColor" : null}
+								className={
+									workInput.minutes !== null ? "activeTextColorBlue" : null
+								}
 								min="0"
 								placeholder="m"
 								name="minutes"
@@ -270,7 +271,9 @@ export default function IntervalTool({ toggleInterval }) {
 								onChange={(e) => workInputHandler(e)}
 							/>
 							<input
-								className={workInput.seconds !== null ? "activeTextColor" : null}
+								className={
+									workInput.seconds !== null ? "activeTextColorBlue" : null
+								}
 								min="0"
 								placeholder="s"
 								name="seconds"
@@ -281,7 +284,9 @@ export default function IntervalTool({ toggleInterval }) {
 						<div className="restInputWrapper">
 							<label htmlFor="rounds">rest</label>
 							<input
-								className={restInput.minutes !== null ? "activeTextColor" : null}
+								className={
+									restInput.minutes !== null ? "activeTextColorBlue" : null
+								}
 								min="0"
 								placeholder="m"
 								name="minutes"
@@ -289,7 +294,9 @@ export default function IntervalTool({ toggleInterval }) {
 								onChange={(e) => restInputHandler(e)}
 							/>
 							<input
-								className={restInput.seconds !== null ? "activeTextColor" : null}
+								className={
+									restInput.seconds !== null ? "activeTextColorBlue" : null
+								}
 								min="0"
 								placeholder="s"
 								name="seconds"
@@ -303,26 +310,20 @@ export default function IntervalTool({ toggleInterval }) {
 
 			{isRunning && (
 				<>
-					<BackIcon
-						tabIndex="0"
-						id="backIcon"
-						className={`toolControl`}
-						alt="Back to change numbers"
-						onClick={() => resetHandler()}
-					/>
-					<div>
-						<h2>
-							R
+					<div className="toolNavWrapper">
+						<BackIcon
+							tabIndex="0"
+							id="backIcon"
+							className={`toolControl`}
+							alt="Back to change numbers"
+							onClick={() => resetHandler()}
+						/>
+						<h2>R{roundAt.current + 1}</h2>
+						<h3>
 							{roundAt.current === roundsTotal.current
-								? roundsTotal.current
-								: roundAt.current + 1}
-							&nbsp;
-							<span>
-								{roundAt.current === roundsTotal.current
-									? "Over"
-									: status.current}
-							</span>
-						</h2>
+								? "Over"
+								: status.current}
+						</h3>
 					</div>
 					<h1>{countdown}</h1>
 				</>

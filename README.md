@@ -14,3 +14,9 @@ ___
 - how to setup and deploy on Netlify
 - how to use [requestAnimationFrame()](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame) method
 - how important is to have a design created upfront with already pre-defined typography and color
+
+## To change/do better next time
+
+- use smaller timeframe to write core functionality
+- keep up with KISS and DRY principles
+- refactor code to a more elegant and pleasing which goes for both **JS** and **CSS**

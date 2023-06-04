@@ -1,10 +1,16 @@
-## About
-This is a simple app where people can easily do interval training and time their sets easily.
+# cronophylax ⏳ [![Netlify Status](https://api.netlify.com/api/v1/badges/730bdb01-d7e1-4f64-a8a8-e713fd0ea221/deploy-status)](https://app.netlify.com/sites/chronophylax/deploys)
+This is a simple SPA to help me keeping track of time while working out at home.
+
+___
 
 ## Techstack:
-React.js, Netlify, 
+[![My Skills](https://skillicons.dev/icons?i=react,netlify,figma&theme=dark)](https://skillicons.dev)
+
+___
 
 ## New things learned
 
-**CSS**
 - [clamp()](https://developer.mozilla.org/en-US/docs/Web/CSS/clamp) - super useful for responsive typography ~94% usability
+- how to setup and deploy on Netlify
+- how to use [requestAnimationFrame()](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame) method
+- how important is to have a design created upfront with already pre-defined typography and color

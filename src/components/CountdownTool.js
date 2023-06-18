@@ -14,6 +14,7 @@ export default function CountdownTool({ toggleCountdown }) {
 	});
 	const [areInputsReady, setAreInputsReady] = useState(false);
 	const [isRunning, setIsRunning] = useState(false);
+	const [isOver, setIsOver] = useState(false);
 
 	const deltaMax = useRef(0);
 	const pause = useRef(false);
@@ -61,8 +62,11 @@ export default function CountdownTool({ toggleCountdown }) {
 				.toISOString()
 				.slice(11, 19);
 			setCountdown(() => differenceConverted);
-			console.log(differenceConverted);
 			let countDownId = requestAnimationFrame(animate);
+			if (difference <= 999) {
+				setIsOver(true);
+				cancelAnimationFrame(countDownId);
+			}
 			if (pause.current) {
 				cancelAnimationFrame(countDownId);
 				pauseTimestamp.current = Date.now();
@@ -107,6 +111,7 @@ export default function CountdownTool({ toggleCountdown }) {
 		goBackToInputs.current = true;
 		setIsRunning(false);
 		setIsPaused(false);
+		setIsOver(false);
 	};
 
 	return (
@@ -158,7 +163,7 @@ export default function CountdownTool({ toggleCountdown }) {
 				</>
 			)}
 
-			{isPaused ? (
+			{isOver ? null : isPaused ? (
 				<div className="toolControlWrapper">
 					<PauseIcon
 						id="pauseIcon"

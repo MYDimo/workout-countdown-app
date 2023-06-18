@@ -18,6 +18,7 @@ export default function IntervalTool({ toggleInterval }) {
 	const [isRunning, setIsRunning] = useState(false);
 	const [isPaused, setIsPaused] = useState(false);
 	const [areInputsReady, setAreInputsReady] = useState(false);
+	const [isOver, setIsOver] = useState(false);
 
 	const roundsTotal = useRef(0);
 	const roundAt = useRef(0);
@@ -163,9 +164,9 @@ export default function IntervalTool({ toggleInterval }) {
 			const timeDiffConverted = new Date(timeDiff).toISOString().slice(14, 19);
 			setCountdown(timeDiffConverted);
 
-			console.log(timeDiffConverted, timeDiff);
 			workAnimateId.current = requestAnimationFrame(animateWork);
 			if (roundAt.current === roundsTotal.current || reset.current) {
+				setIsOver(true);
 				cancelAnimationFrame(workAnimateId.current);
 				setCountdown("00:00");
 				work.current = 0;
@@ -233,6 +234,7 @@ export default function IntervalTool({ toggleInterval }) {
 		roundAt.current = 0;
 		setIsPaused(false);
 		setIsRunning(false);
+		setIsOver(false);
 	};
 
 	return (
@@ -318,18 +320,14 @@ export default function IntervalTool({ toggleInterval }) {
 							alt="Back to change numbers"
 							onClick={() => resetHandler()}
 						/>
-						<h2>R{roundAt.current + 1}</h2>
-						<h3>
-							{roundAt.current === roundsTotal.current
-								? "Over"
-								: status.current}
-						</h3>
+						<h2>R{isOver ? roundAt.current : roundAt.current + 1}</h2>
+						<h3>{isOver ? "Over" : status.current}</h3>
 					</div>
 					<h1>{countdown}</h1>
 				</>
 			)}
 
-			{isPaused ? (
+			{isOver ? null : isPaused ? (
 				<div className="toolControlWrapper">
 					<PauseIcon
 						tabIndex="0"

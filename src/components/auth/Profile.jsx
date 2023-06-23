@@ -50,7 +50,7 @@ const Profile = ({ toggleClock }) => {
 
 		const userRef = ref(db, `users/${user.uid}/`);
 		const userActivitiesRef = child(userRef, "activities");
-		const newActivityRef = push(userActivitiesRef, newActivityObj);
+		push(userActivitiesRef, newActivityObj); //const newActivityRef = 
 		setNewActivityName("");
 	};
 

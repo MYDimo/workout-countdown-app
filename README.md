@@ -4,9 +4,6 @@ This is a simple SPA to help me keeping track of time while working out at home.
 ## Techstack:
 [![My Skills](https://skillicons.dev/icons?i=react,netlify,firebase,figma&theme=dark)](https://skillicons.dev)
 
-
----
-
 ## New things learned
 
 - [clamp()](https://developer.mozilla.org/en-US/docs/Web/CSS/clamp) - super useful for responsive typography ~94% usability

@@ -4,11 +4,11 @@ import { ref, set } from "firebase/database";
 import { db } from "../../firebase";
 
 export default function SignUp() {
-	const {createUser, user} = UserAuth();
+	const {createUser} = UserAuth();
 
 	const [email, setEmail] = useState(null);
 	const [pass, setPass] = useState(null);
-	const [rePass, setRePass] = useState(null);
+	// const [rePass, setRePass] = useState(null);
 
 	const writeUserData = (email, userId) => {
 		const reference = ref(db, 'users/' + userId);
@@ -56,7 +56,7 @@ export default function SignUp() {
 					type="password"
 					placeholder="Retype your password"
 					onChange={(e) => {
-						setRePass(e.target.value);
+						// setRePass(e.target.value);
 					}}
 				/>
 				<button type="submit" onClick={(e) => signUpHandler(e)}>Create</button>

@@ -1,0 +1,22 @@
+.avatarWrapper {
+  background-color: gray;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 5px solid salmon;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.4s ease-in-out;
+  cursor: pointer;
+}
+
+.avatarWrapper > h2 {
+  font-size: 60px;
+  cursor: pointer;
+}
+
+.avatarWrapper:hover,
+.avatarWrapper:focus {
+  transform: scale(1.2);
+}

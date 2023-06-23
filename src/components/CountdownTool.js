@@ -3,8 +3,15 @@ import { ReactComponent as CloseIcon } from "../icons/close-icon.svg";
 import { ReactComponent as StartIcon } from "../icons/start-icon.svg";
 import { ReactComponent as PauseIcon } from "../icons/pause-icon.svg";
 import { ReactComponent as BackIcon } from "../icons/back-icon.svg";
+import { UserAuth } from "../context/AuthContext";
+import { db } from "../firebase";
+import { onValue, ref, push, child, update } from "firebase/database";
+import formatDuration from "../utils/formatDuration.js";
 
 export default function CountdownTool({ toggleCountdown }) {
+	const { user } = UserAuth();
+	const [userActivities, setUserActivities] = useState([]);
+
 	const [countdown, setCountdown] = useState(`00:00:00`);
 	const [isPaused, setIsPaused] = useState(false);
 	const [inputTime, setInputTime] = useState({
@@ -17,10 +24,26 @@ export default function CountdownTool({ toggleCountdown }) {
 	const [isOver, setIsOver] = useState(false);
 
 	const deltaMax = useRef(0);
+	const inputInMilliseconds = useRef(0);
 	const pause = useRef(false);
 	const pauseTimestamp = useRef(0);
 	const pauseElapsed = useRef(0);
 	const goBackToInputs = useRef(false);
+
+	useEffect(() => {
+		if (user) {
+			const query = ref(db, `users/${user.uid}/activities`);
+
+			return onValue(query, (snapshot) => {
+				const data = snapshot.val();
+				if (snapshot.exists()) {
+					setUserActivities(data);
+				}
+			});
+		} else {
+			return;
+		}
+	}, [user]);
 
 	useEffect(() => {
 		if (
@@ -50,12 +73,12 @@ export default function CountdownTool({ toggleCountdown }) {
 
 		const animate = () => {
 			if (deltaMax.current === 0) {
-				deltaMax.current =
-					Date.now() +
-					inputTime.minutes * 60000 +
+				inputInMilliseconds.current =
+					+inputTime.minutes * 60000 +
 					inputTime.seconds * 1000 +
-					1000 +
 					inputTime.hours * 3600000;
+
+				deltaMax.current = Date.now() + inputInMilliseconds.current + 1000;
 			}
 			const difference = Math.abs(Date.now() - deltaMax.current);
 			const differenceConverted = new Date(difference)
@@ -114,6 +137,25 @@ export default function CountdownTool({ toggleCountdown }) {
 		setIsOver(false);
 	};
 
+	const addTimeToActivity = (e) => {
+		const activityId = e.target.dataset.id;
+		const timestampOfCreation = Date.now();
+		const activityTotalDuration =
+			userActivities[activityId].totalDuration;
+
+		const entry = {
+			duration: inputInMilliseconds.current,
+			timestamp: timestampOfCreation,
+		};
+
+		const userRef = ref(db, `users/${user.uid}/`);
+		const activityRef = ref(db, `users/${user.uid}/activities/${activityId}/`);
+		const activityEntriesRef = child(userRef, `activities/${activityId}/entries/`);
+
+		push(activityEntriesRef , entry);
+		return update(activityRef, {totalDuration: inputInMilliseconds.current + activityTotalDuration});
+	};
+
 	return (
 		<div className="toolBody">
 			{isRunning ? (
@@ -163,7 +205,20 @@ export default function CountdownTool({ toggleCountdown }) {
 				</>
 			)}
 
-			{isOver ? null : isPaused ? (
+			{isOver ? (
+				user && (
+					<div>
+						<p>Good job! Which activity to add the time to?</p>
+						<ul className="userActivitiesWrapper">
+							{Object.entries(userActivities).map(([id, activity]) => (
+								<li key={id} data-id={id} onClick={(e) => addTimeToActivity(e)}>
+									{activity.activityName} - {formatDuration(activity.totalDuration)}
+								</li>
+							))}
+						</ul>
+					</div>
+				)
+			) : isPaused ? (
 				<div className="toolControlWrapper">
 					<PauseIcon
 						id="pauseIcon"

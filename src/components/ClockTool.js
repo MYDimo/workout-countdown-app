@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ReactComponent as CloseIcon } from '../icons/close-icon.svg' 
+import { ReactComponent as CloseIcon } from '../icons/close-icon.svg';
 
 export default function ClockTool({ toggleClock }) {
 	const [currentTime, setTime] = useState(`00:00:00`);

@@ -27,7 +27,7 @@ body {
 	height: inherit;
 }
 
-button {
+.navButton {
 	font-family: "arial", sans-serif;
 	font-weight: 900;
 	font-size: clamp(5vw, 5rem, 8vh);
@@ -177,7 +177,7 @@ input:focus {
 	font-size: clamp(5vw, 5rem, 5vh);
 }
 
-button:hover {
+.navButton:hover {
 	transform: scale(1.5);
 	box-shadow: inset 0px -30px 0px 0px var(--blue);
 }
@@ -218,3 +218,10 @@ button:hover {
   padding: 40px 0px;
 }
 
+.auth {
+  width: 200px;
+  font-size: 16px;
+  border-bottom: none;
+  border-radius: 10px;
+  background-color: #525565
+}

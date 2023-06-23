@@ -1,12 +1,11 @@
 # cronophylax ⏳ [![Netlify Status](https://api.netlify.com/api/v1/badges/730bdb01-d7e1-4f64-a8a8-e713fd0ea221/deploy-status)](https://app.netlify.com/sites/chronophylax/deploys)
 This is a simple SPA to help me keeping track of time while working out at home.
 
-___
-
 ## Techstack:
-[![My Skills](https://skillicons.dev/icons?i=react,netlify,figma&theme=dark)](https://skillicons.dev)
+[![My Skills](https://skillicons.dev/icons?i=react,netlify,firebase,figma&theme=dark)](https://skillicons.dev)
 
-___
+
+---
 
 ## New things learned
 

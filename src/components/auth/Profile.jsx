@@ -21,6 +21,8 @@ const Profile = ({ toggleClock }) => {
 				const data = snapshot.val();
 				if (snapshot.exists()) {
 					setUserActivities(data);
+				} else {
+					setUserActivities([]);
 				}
 			});
 		} else {
@@ -59,8 +61,9 @@ const Profile = ({ toggleClock }) => {
 
 		const userRef = ref(db, `users/${user.uid}/`);
 		const activityRef = child(userRef, `activities/${activityId}`);
-		remove(activityRef);
-		console.log(e.target.dataset.id);
+		const responseAfterRemove = remove(activityRef);
+		// console.log(`yo`, userActivities);
+		// console.log(responseAfterRemove);
 	};
 
 	// const formatDuration = (milliseconds) => {

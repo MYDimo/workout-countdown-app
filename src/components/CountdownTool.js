@@ -16,8 +16,7 @@ export default function CountdownTool({ toggleCountdown }) {
 	const [isPaused, setIsPaused] = useState(false);
 	const [inputTime, setInputTime] = useState({
 		hours: null,
-		minutes: null,
-		seconds: null,
+		minutes: null
 	});
 	const [areInputsReady, setAreInputsReady] = useState(false);
 	const [isRunning, setIsRunning] = useState(false);
@@ -48,8 +47,7 @@ export default function CountdownTool({ toggleCountdown }) {
 	useEffect(() => {
 		if (
 			inputTime.hours !== null &&
-			inputTime.minutes !== null &&
-			inputTime.seconds !== null
+			inputTime.minutes !== null
 		) {
 			setAreInputsReady(true);
 		} else {
@@ -75,7 +73,6 @@ export default function CountdownTool({ toggleCountdown }) {
 			if (deltaMax.current === 0) {
 				inputInMilliseconds.current =
 					+inputTime.minutes * 60000 +
-					inputTime.seconds * 1000 +
 					inputTime.hours * 3600000;
 
 				deltaMax.current = Date.now() + inputInMilliseconds.current + 1000;
@@ -179,7 +176,7 @@ export default function CountdownTool({ toggleCountdown }) {
 					<div className="countdownInputsWrapper">
 						<input
 							className={inputTime.hours !== null ? "activeTextColor" : null}
-							placeholder="h"
+							placeholder="hours"
 							name="hours"
 							autoFocus
 							value={inputTime.hours !== null ? `${inputTime.hours}` : ""}
@@ -188,17 +185,9 @@ export default function CountdownTool({ toggleCountdown }) {
 						<h2>:</h2>
 						<input
 							className={inputTime.minutes !== null ? "activeTextColor" : null}
-							placeholder="m"
+							placeholder="minutes"
 							name="minutes"
 							value={inputTime.minutes !== null ? `${inputTime.minutes}` : ""}
-							onChange={(e) => inputHandler(e)}
-						/>
-						<h2>:</h2>
-						<input
-							className={inputTime.seconds !== null ? "activeTextColor" : null}
-							placeholder="s"
-							name="seconds"
-							value={inputTime.seconds !== null ? `${inputTime.seconds}` : ""}
 							onChange={(e) => inputHandler(e)}
 						/>
 					</div>

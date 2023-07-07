@@ -46,7 +46,7 @@ export default function ToolNavigator() {
 					<Avatar toggleProfile={toggleProfile}/>
 					<button
 						onClick={toggleClock}
-						className={dimmedActive ? "dimmedActive" : null}
+						className={dimmedActive ? "dimmedActive navButton" : "navButton"}
 						onMouseOver={MouseOver}
 						onMouseOut={MouseOut}
 					>
@@ -54,7 +54,7 @@ export default function ToolNavigator() {
 					</button>
 					<button
 						onClick={toggleInterval}
-						className={dimmedActive ? "dimmedActive" : null}
+						className={dimmedActive ? "dimmedActive navButton" : "navButton"}
 						onMouseOver={MouseOver}
 						onMouseOut={MouseOut}
 					>
@@ -62,7 +62,7 @@ export default function ToolNavigator() {
 					</button>
 					<button
 						onClick={toggleCountdown}
-						className={dimmedActive ? "dimmedActive" : null}
+						className={dimmedActive ? "dimmedActive navButton" : "navButton"}
 						onMouseOver={MouseOver}
 						onMouseOut={MouseOut}
 					>

@@ -10,6 +10,7 @@ This is a simple SPA to help me keeping track of time while working out at home.
 - how to setup and deploy on Netlify
 - how to use [requestAnimationFrame()](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame) method
 - how important is to have a design created upfront with already pre-defined typography and color
+- useEffect unmount callback
 
 ## To change/do better next time
 

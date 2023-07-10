@@ -130,7 +130,7 @@ const Profile = ({ toggleClock }) => {
 											value={
 												renameInput !== "n/a"
 													? renameInput
-													: renameInput == "n/a"
+													: renameInput === "n/a"
 													? activity.activityName
 													: renameInput
 											}
